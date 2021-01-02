@@ -1,15 +1,17 @@
+#! env/bin/python3
 from selenium import webdriver
 from email.message import EmailMessage
 import smtplib, time, os
 
 #variables
-url = ''
-price_target = ''
+url = open('product', 'r').read()
+price_target = open('price_target', 'r').read()
 loop = True
 
-sender = os.environ.get('SENDER')
-receiver = os.environ.get('RECEIVER')
-password = os.environ.get('PASSWORD')
+driver_path = open('geckodriver', 'r').read()
+sender = open('sender', 'r').read()
+receiver = open('receiver', 'r').read()
+password = open('password', 'r').read()
 
 #Test E-mail
 email_test = EmailMessage()
@@ -41,8 +43,8 @@ email_back.set_content("The bot work is finished for "+ receiver)
 while loop == True:
     #scrap
     driver_options = webdriver.FirefoxOptions()
-    driver_options.binary_location = os.environ.get("FIREFOX_BIN")
-    driver = webdriver.Firefox(executable_path=os.environ.get('GECKODRIVER'), firefox_options=driver_options)
+    driver_options.add_argument('--headless')
+    driver = webdriver.Firefox(executable_path=driver_path, firefox_options=driver_options)
     driver.get(url)
     price = driver.find_element_by_css_selector('#priceblock_ourprice')
 #Send E-mail 
@@ -57,4 +59,4 @@ while loop == True:
             smtp.send_message(email_back)
         loop = False
     driver.close()
-    time.sleep(360)
+    time.sleep(60)

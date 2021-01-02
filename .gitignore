@@ -2,4 +2,6 @@ env
 *.swap
 note_*
 *.html
+*.log
+*geckodriver
 
